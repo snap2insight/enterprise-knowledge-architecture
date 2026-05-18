@@ -1,0 +1,50 @@
+# EKA pre-commit hooks. Copy to .pre-commit-config.yaml in your repo root.
+# Install with: pre-commit install
+#
+# Adjust the hook list per the repo's tier — see comments below.
+
+repos:
+  # === Core EKA hooks (required for L1 conformance) ===
+  - repo: https://github.com/eka-spec/eka-hooks
+    rev: v0.1.0                              # pin to a specific spec version
+    hooks:
+      - id: eka-frontmatter-required
+        # Every .md file (excluding exclude_paths from CLASSIFICATION.yml)
+        # must have valid frontmatter conforming to the schema.
+      - id: eka-tier-consistency
+        # tier == derive_tier(classification, data_subjects)
+      - id: eka-classification-max
+        # tier must not exceed CLASSIFICATION.yml::repo.max_tier
+      - id: eka-review-cadence
+        # next_review == last_reviewed + review_cadence
+      - id: eka-data-subjects-allowed
+        # data_subjects requires CLASSIFICATION.yml::data_subjects_allowed = true
+      - id: eka-related-uris-valid
+        # `related:` entries use known URI schemes
+
+  # === L2+ hooks (uncomment for L2+ repos) ===
+  # - repo: https://github.com/eka-spec/eka-hooks
+  #   rev: v0.1.0
+  #   hooks:
+  #     - id: eka-codename-filenames
+  #       # No real entity names (from CODENAMES.yml::*.name) in file paths
+  #     - id: eka-codename-refs-defined
+  #       # Every codename in codename_refs exists in CODENAMES.yml
+
+  # === Secret scanning (always required) ===
+  - repo: https://github.com/gitleaks/gitleaks
+    rev: v8.18.0
+    hooks:
+      - id: gitleaks
+        # Block commits containing API keys, JWTs, private keys, etc.
+
+  # === Optional: standard hygiene ===
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.6.0
+    hooks:
+      - id: check-yaml
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-merge-conflict
+      - id: check-added-large-files
+        args: ['--maxkb=500']  # 500KB max; flag the rest

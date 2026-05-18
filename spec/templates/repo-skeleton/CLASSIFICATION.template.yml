@@ -1,0 +1,64 @@
+# EKA-conformant repository classification.
+# Copy this file to the root of your new EKA repo; replace ALL CAPS placeholders.
+# Validates against spec/schemas/classification-yml.schema.json.
+
+schema: eka.v1
+
+repo:
+  name: REPO_NAME                          # e.g., "acme-eng-docs"
+  visibility: VISIBILITY                   # public | internal | private
+  max_tier: TIER                           # L0 | L1 | L2 | L3 — the highest tier this repo accepts
+  default_domain: DOMAIN                   # public | customer | people | business | product | operational
+  default_classification:
+    # The baseline applied to new documents that don't override.
+    # Conservative defaults below — adjust per repo purpose.
+    C: MODERATE                            # LOW | MODERATE | HIGH
+    I: MODERATE
+    A: LOW
+
+# Whether documents in this repo may declare non-empty data_subjects.
+# Must be false at L0 and L1. Required true (or omitted/default) at L2+ if
+# the repo references individuals; better yet, push those docs to L3.
+data_subjects_allowed: false
+
+# Whether codenames are mandatory in file paths and first-mention body text.
+# Required true at L2+. Optional at L1.
+codenames_required: false
+
+# Path to CODENAMES.yml if codenames_required is true.
+# codenames_file: CODENAMES.yml
+
+# Review cadence — how often documents must be revalidated.
+review_cadence:
+  default: 365d                            # L1 default; tighten for L2/L3
+  by_domain:
+    # operational: 180d
+    # customer: 90d
+  override_allowed: true                   # individual docs may override
+
+# Audit log configuration.
+audit_log:
+  enabled: true
+  retention_days: 365                      # 365 (L1) / 730 (L2) / 1095 (L3)
+  # destination: app-insights / cloudwatch / etc.
+
+# Pre-commit hooks to run.
+hooks:
+  pre_commit:
+    - eka-frontmatter-required
+    - eka-tier-consistency
+    - eka-classification-max
+    - eka-review-cadence
+    - eka-data-subjects-allowed
+    - eka-related-uris-valid
+    # Uncomment at L2+:
+    # - eka-codename-filenames
+    # - eka-codename-refs-defined
+    - gitleaks                             # always run
+
+# Paths excluded from validation. Glob patterns.
+exclude_paths:
+  - "_build/**"
+  - "node_modules/**"
+  - ".git/**"
+  - "exports/**"

@@ -1,0 +1,62 @@
+# EKA codename registry. ITSELF L2-CLASSIFIED; do not put this file in an L1 repo.
+# Validates against spec/schemas/codenames-yml.schema.json.
+#
+# Codename scheme: stable numeric IDs (C001) for file paths and structural refs;
+# mnemonic display names (Vesta) for body-text readability.
+#
+# Theme conventions used here (pick one for your org, stay consistent):
+#   - customers: Roman gods
+#   - partners: Greek gods
+#   - competitors: Norse gods
+#
+# Confidential entities (relationship not publicly disclosed): use the
+# `{Confidential X}` placeholder rather than the real name — even in this file.
+
+schema: eka.v1.codenames
+
+customers:
+  # C001:
+  #   name: "Example Customer 1"
+  #   mnemonic: "Vesta"
+  #   disclosure: acknowledged-public
+  #   since: 2024-Q3
+  #   primary_owner: account-lead@example.com
+  #   notes: "Public partnership announced 2025-01."
+
+  # C002:
+  #   name: "{Confidential Customer 2}"
+  #   mnemonic: "Apollo"
+  #   disclosure: confidential
+  #   since: 2025-Q4
+  #   primary_owner: account-lead@example.com
+
+partners:
+  # P001:
+  #   name: "Example Partner 1"
+  #   mnemonic: "Hermes"
+  #   disclosure: confidential
+
+competitors:
+  # X001:
+  #   name: "Competitor Y"
+  #   mnemonic: "Odin"
+  #   disclosure: confidential
+
+investors:
+  # INV001:
+  #   name: "Example Fund"
+  #   mnemonic: "Atlas"
+  #   disclosure: confidential
+
+board_members:
+  # BOARD001:
+  #   name: "Board Member Name"
+  #   mnemonic: "Athena"
+  #   disclosure: confidential
+
+employees:
+  # EMP codes are registered here for existence; mapping lives in HRIS.
+  # EMP-001:
+  #   code_only: true
+  #   department: engineering
+  #   active: true

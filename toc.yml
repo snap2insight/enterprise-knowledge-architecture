@@ -1,0 +1,81 @@
+# Table of Contents for the EKA project.
+# Imported into myst.yml via `extends:`.
+#
+# To add a new page: add a file: entry under the appropriate group below.
+# To re-order: move entries within their group.
+# To add a new top-level group: add a `title:` entry with `children:`.
+
+version: 1
+project:
+  toc:
+    - file: landing-page.md
+    - file: README.md
+    - file: index.md
+
+    - title: "Primer (why & what)"
+      children:
+        - file: primer/README.md
+        - file: primer/00-introduction.md
+        - file: primer/01-principles.md
+        - file: primer/02-classification-model.md
+        - file: primer/03-tier-architecture.md
+        - file: primer/04-storage-and-naming.md
+        - file: primer/05-metadata-and-labeling.md
+        - file: primer/06-lifecycle-and-review.md
+        - file: primer/07-agent-topology.md
+        - file: primer/08-compliance-mapping.md
+        - file: primer/09-tooling-stack.md
+        - file: primer/10-implementation-roadmap.md
+
+    - title: "Spec (how)"
+      children:
+        - file: spec/README.md
+        - file: spec/conformance.md
+        - title: "Schemas"
+          children:
+            - file: spec/schemas/README.md
+        - title: "Templates"
+          children:
+            - file: spec/templates/README.md
+            - file: spec/templates/repo-skeleton/README.md
+            - file: spec/templates/content-types/README.md
+            - file: spec/templates/claude-md/README.md
+        - title: "Skills"
+          children:
+            - file: spec/skills/README.md
+            - file: spec/skills/eka-agent-onboarding.skill.md
+            - file: spec/skills/eka-bootstrap-org.skill.md
+            - file: spec/skills/eka-bootstrap-repo.skill.md
+            - file: spec/skills/eka-classify-doc.skill.md
+            - file: spec/skills/eka-new-doc.skill.md
+            - file: spec/skills/eka-review-doc.skill.md
+            - file: spec/skills/eka-erasure.skill.md
+            - file: spec/skills/eka-audit-stale.skill.md
+            - file: spec/skills/eka-classification-audit.skill.md
+        - title: "Hooks"
+          children:
+            - file: spec/hooks/README.md
+        - title: "CI / Build"
+          children:
+            - file: spec/ci/README.md
+        - title: "Operations runbooks"
+          children:
+            - file: spec/operations/README.md
+            - file: spec/operations/acl-automation.runbook.md
+            - file: spec/operations/access-review.runbook.md
+            - file: spec/operations/erasure.runbook.md
+            - file: spec/operations/offboarding.runbook.md
+            - file: spec/operations/codename-management.runbook.md
+            - file: spec/operations/annual-audit.runbook.md
+        - title: "Reference"
+          children:
+            - file: spec/reference/glossary.md
+            - file: spec/reference/abbreviations.md
+            - file: spec/reference/uri-schemes.md
+            - file: spec/reference/error-codes.md
+
+    - title: "Reference implementation (generic example)"
+      children:
+        - file: reference-implementation/README.md
+        - file: reference-implementation/00-overview.md
+        - file: reference-implementation/01-confidential-references.md

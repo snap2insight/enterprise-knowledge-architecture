@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://eka-spec.org/schemas/v1/manifest.schema.json",
+  "title": "EKA Manifest (v1)",
+  "description": "Schema for the frontmatter of _meta/manifest.md. The manifest body is human-authored prose, but its frontmatter follows this schema.",
+  "type": "object",
+  "allOf": [
+    { "$ref": "frontmatter.schema.json" },
+    {
+      "required": ["labels"],
+      "properties": {
+        "labels": {
+          "type": "array",
+          "contains": { "const": "eka-required" },
+          "description": "Manifest documents must include the 'eka-required' label."
+        },
+        "review_cadence": {
+          "type": "string",
+          "pattern": "^\\d+[dw]$",
+          "description": "Manifests review at most weekly or daily — never beyond 'd' or 'w'."
+        }
+      }
+    }
+  ]
+}

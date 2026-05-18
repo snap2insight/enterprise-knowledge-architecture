@@ -1,0 +1,115 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://eka-spec.org/schemas/v1/codenames-yml.schema.json",
+  "title": "EKA CODENAMES.yml (v1)",
+  "description": "Schema for the CODENAMES.yml file at the root of every L2+ repo. Itself L2-classified.",
+  "type": "object",
+  "required": ["schema"],
+  "properties": {
+    "schema": {
+      "type": "string",
+      "const": "eka.v1.codenames"
+    },
+    "customers": {
+      "type": "object",
+      "patternProperties": {
+        "^C\\d{3,}$": { "$ref": "#/$defs/entity" }
+      },
+      "additionalProperties": false
+    },
+    "partners": {
+      "type": "object",
+      "patternProperties": {
+        "^P\\d{3,}$": { "$ref": "#/$defs/entity" }
+      },
+      "additionalProperties": false
+    },
+    "competitors": {
+      "type": "object",
+      "patternProperties": {
+        "^X\\d{3,}$": { "$ref": "#/$defs/entity" }
+      },
+      "additionalProperties": false
+    },
+    "investors": {
+      "type": "object",
+      "patternProperties": {
+        "^INV\\d{3,}$": { "$ref": "#/$defs/entity" }
+      },
+      "additionalProperties": false
+    },
+    "board_members": {
+      "type": "object",
+      "patternProperties": {
+        "^BOARD\\d{3,}$": { "$ref": "#/$defs/entity" }
+      },
+      "additionalProperties": false
+    },
+    "employees": {
+      "type": "object",
+      "description": "Employee codes registered but mapped via HRIS, not here. code_only must be true.",
+      "patternProperties": {
+        "^EMP-[\\w-]+$": {
+          "type": "object",
+          "required": ["code_only"],
+          "properties": {
+            "code_only": { "const": true },
+            "department": { "type": "string" },
+            "active": { "type": "boolean", "default": true }
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "entity": {
+      "type": "object",
+      "required": ["name", "mnemonic", "disclosure", "engagement_stage"],
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Real entity name. Set to '{Confidential X}' placeholder for entities whose existence is not public."
+        },
+        "mnemonic": {
+          "type": "string",
+          "pattern": "^[A-Z][a-z]+$",
+          "description": "Single capitalized word from the org's chosen theme (Roman gods, constellations, etc.)."
+        },
+        "disclosure": {
+          "type": "string",
+          "enum": ["confidential", "acknowledged-public", "historical"],
+          "description": "Whether this entity's relationship is publicly known."
+        },
+        "engagement_stage": {
+          "type": "string",
+          "enum": ["pre-rfp", "rfp", "negotiation", "live", "historical"],
+          "description": "Stage of the engagement. Determines the breadth of internal access. pre-rfp/rfp/negotiation: account leads only. live: account leads + collaborating internal teams. historical: archived access (HR + legal + compliance only)."
+        },
+        "since": {
+          "type": "string",
+          "pattern": "^\\d{4}(-Q[1-4])?$",
+          "description": "When the relationship began (year, optionally quarter)."
+        },
+        "until": {
+          "type": "string",
+          "pattern": "^\\d{4}(-Q[1-4])?$",
+          "description": "When the relationship ended (for historical)."
+        },
+        "primary_owner": {
+          "type": "string",
+          "description": "Account owner / point of contact for this entity."
+        },
+        "internal_team_groups": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Workspace groups granted access when engagement_stage = live. Examples: ['s2i-eng@', 's2i-product@', 's2i-data@']. Empty for pre-live stages (account-lead-only access)."
+        },
+        "notes": {
+          "type": "string",
+          "description": "Free-text. Public-statement references, key context, contract notes."
+        }
+      }
+    }
+  }
+}

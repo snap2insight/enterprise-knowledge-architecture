@@ -1,0 +1,68 @@
+# EKA Pages deployment workflow.
+# Drop in .github/workflows/eka-pages-deploy.yml of your EKA repo.
+
+name: EKA Build & Deploy Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: Build MyST site
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 24
+
+      - name: Install MyST
+        run: npm install -g mystmd
+
+      - name: Build with MyST
+        run: |
+          BASE_URL="/${{ github.event.repository.name }}" myst build --html
+
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v5
+        with:
+          path: "./_build/html"
+
+  verify-visibility:
+    name: Verify Pages visibility matches tier
+    runs-on: ubuntu-latest
+    if: ${{ vars.EKA_CONFORMANCE_TARGET != 'L0' }}
+    steps:
+      - uses: actions/checkout@v5
+      - name: Confirm Pages is auth-gated
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          PAGES_VIS=$(gh api repos/${{ github.repository }}/pages --jq '.visibility' 2>/dev/null || echo "public")
+          if [ "$PAGES_VIS" = "public" ] && [ "${{ vars.EKA_CONFORMANCE_TARGET }}" != "L0" ]; then
+            echo "::error::Pages is publicly visible but repo targets non-L0 conformance"
+            exit 1
+          fi
+
+  deploy:
+    name: Deploy
+    needs: [build, verify-visibility]
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v5

@@ -1,0 +1,105 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://eka-spec.org/schemas/v1/classification-yml.schema.json",
+  "title": "EKA CLASSIFICATION.yml (v1)",
+  "description": "Schema for the root-level CLASSIFICATION.yml file of every EKA-conformant repository.",
+  "type": "object",
+  "required": ["schema", "repo", "review_cadence", "hooks"],
+  "additionalProperties": false,
+  "properties": {
+    "schema": {
+      "type": "string",
+      "const": "eka.v1",
+      "description": "Spec version this file conforms to."
+    },
+    "repo": {
+      "type": "object",
+      "required": ["name", "visibility", "max_tier", "default_domain", "default_classification"],
+      "additionalProperties": false,
+      "properties": {
+        "name": { "type": "string", "minLength": 1 },
+        "visibility": {
+          "type": "string",
+          "enum": ["public", "internal", "private"],
+          "description": "GitHub-equivalent visibility."
+        },
+        "max_tier": {
+          "type": "string",
+          "enum": ["L0", "L1", "L2", "L3"],
+          "description": "Highest tier this repo may contain. Pre-commit hook rejects content above this."
+        },
+        "default_domain": {
+          "type": "string",
+          "enum": ["public", "customer", "people", "business", "product", "operational"],
+          "description": "Default domain for new documents that don't declare one (rare; prefer explicit)."
+        },
+        "default_classification": {
+          "type": "object",
+          "required": ["C", "I", "A"],
+          "properties": {
+            "C": { "enum": ["LOW", "MODERATE", "HIGH"] },
+            "I": { "enum": ["LOW", "MODERATE", "HIGH"] },
+            "A": { "enum": ["LOW", "MODERATE", "HIGH"] }
+          },
+          "description": "Default classification for new documents per default_domain."
+        }
+      }
+    },
+    "data_subjects_allowed": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether documents in this repo may declare non-empty data_subjects. Forced false at L1."
+    },
+    "codenames_required": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether codenames are mandatory in paths and body. Required at L2+."
+    },
+    "codenames_file": {
+      "type": ["string", "null"],
+      "default": null,
+      "description": "Path to CODENAMES.yml relative to repo root. Required if codenames_required is true."
+    },
+    "review_cadence": {
+      "type": "object",
+      "required": ["default"],
+      "properties": {
+        "default": { "type": "string", "pattern": "^\\d+[dwmy]$" },
+        "by_domain": {
+          "type": "object",
+          "additionalProperties": { "type": "string", "pattern": "^\\d+[dwmy]$" }
+        },
+        "override_allowed": {
+          "type": "boolean",
+          "default": true,
+          "description": "Whether individual documents may override the cadence."
+        }
+      }
+    },
+    "audit_log": {
+      "type": "object",
+      "properties": {
+        "enabled": { "type": "boolean", "default": true },
+        "retention_days": { "type": "integer", "minimum": 365 },
+        "destination": { "type": "string" }
+      }
+    },
+    "hooks": {
+      "type": "object",
+      "required": ["pre_commit"],
+      "properties": {
+        "pre_commit": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Names of EKA hooks to run pre-commit."
+        }
+      }
+    },
+    "exclude_paths": {
+      "type": "array",
+      "items": { "type": "string" },
+      "default": ["_build/**", "node_modules/**", ".git/**"],
+      "description": "Globs to exclude from validation. Build artifacts, vendored deps."
+    }
+  }
+}

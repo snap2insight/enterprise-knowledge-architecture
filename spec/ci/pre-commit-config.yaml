@@ -1,0 +1,31 @@
+# EKA pre-commit hooks. Pinned reference version.
+# Copy to .pre-commit-config.yaml in your repo root.
+
+repos:
+  - repo: https://github.com/eka-spec/eka-hooks
+    rev: v0.1.0
+    hooks:
+      - id: eka-frontmatter-required
+      - id: eka-tier-consistency
+      - id: eka-classification-max
+      - id: eka-review-cadence
+      - id: eka-data-subjects-allowed
+      - id: eka-related-uris-valid
+      # Uncomment at L2+:
+      # - id: eka-codename-filenames
+      # - id: eka-codename-refs-defined
+
+  - repo: https://github.com/gitleaks/gitleaks
+    rev: v8.18.0
+    hooks:
+      - id: gitleaks
+
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.6.0
+    hooks:
+      - id: check-yaml
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-merge-conflict
+      - id: check-added-large-files
+        args: ['--maxkb=500']

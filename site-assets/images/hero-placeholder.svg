@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 300" role="img" aria-label="Enterprise Knowledge Architecture">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#1f2937"/>
+      <stop offset="1" stop-color="#374151"/>
+    </linearGradient>
+  </defs>
+  <rect width="600" height="300" rx="12" fill="url(#bg)"/>
+  <text x="300" y="135" font-family="Helvetica,Arial,sans-serif" font-size="38" font-weight="700" fill="#f9fafb" text-anchor="middle">Enterprise</text>
+  <text x="300" y="185" font-family="Helvetica,Arial,sans-serif" font-size="38" font-weight="700" fill="#f9fafb" text-anchor="middle">Knowledge Architecture</text>
+  <text x="300" y="232" font-family="Helvetica,Arial,sans-serif" font-size="14" font-weight="400" fill="#9ca3af" text-anchor="middle" letter-spacing="2">PLACEHOLDER</text>
+</svg>

@@ -1,0 +1,22 @@
+# Build artifacts
+_build/
+exports/
+node_modules/
+
+# Vendored at build time from the external toolkit repo.
+# Local devs populate via `bin/setup-dev.sh` (see README). CI fetches
+# in the deploy workflow. Never commit this copy.
+_toolkit
+
+# OS metadata
+.DS_Store
+Thumbs.db
+
+# Editor / agent local
+.vscode/
+.idea/
+*.swp
+
+# Local env
+.env
+.env.*

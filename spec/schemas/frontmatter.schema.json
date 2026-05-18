@@ -1,0 +1,182 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://eka-spec.org/schemas/v1/frontmatter.schema.json",
+  "title": "EKA Document Frontmatter (v1)",
+  "description": "Schema for the YAML frontmatter of every markdown file in an EKA-conformant repository. EKA-specific fields are namespaced under `options.eka.*` to avoid conflicts with mystmd's native frontmatter keys.",
+  "type": "object",
+  "required": ["title", "options"],
+  "properties": {
+    "title": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 200,
+      "description": "Human-readable title (mystmd-native field)."
+    },
+    "subtitle": {
+      "type": "string",
+      "description": "Optional subtitle (mystmd-native)."
+    },
+    "description": {
+      "type": "string",
+      "description": "Short description (mystmd-native)."
+    },
+    "authors": {
+      "type": "array",
+      "description": "Authors (mystmd-native)."
+    },
+    "date": {
+      "type": "string",
+      "description": "Document date (mystmd-native)."
+    },
+    "keywords": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Free-text search keywords (mystmd-native)."
+    },
+    "tags": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "mystmd-native tags."
+    },
+    "options": {
+      "type": "object",
+      "required": ["eka"],
+      "properties": {
+        "eka": { "$ref": "#/$defs/ekaBlock" }
+      }
+    }
+  },
+  "$defs": {
+    "ekaBlock": {
+      "type": "object",
+      "required": [
+        "schema",
+        "domain",
+        "classification",
+        "tier",
+        "owner",
+        "status",
+        "last_reviewed",
+        "next_review",
+        "review_cadence"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "schema": {
+          "type": "string",
+          "enum": ["eka.v1", "eka.v1.skill", "eka.v1.manifest"],
+          "description": "EKA schema version this doc conforms to. Use `eka.v1.skill` for skill files (adds skill block), `eka.v1.manifest` for manifest files."
+        },
+        "domain": {
+          "type": "string",
+          "enum": ["public", "customer", "people", "business", "product", "operational"]
+        },
+        "classification": {
+          "type": "object",
+          "required": ["C", "I", "A"],
+          "additionalProperties": false,
+          "properties": {
+            "C": { "type": "string", "enum": ["LOW", "MODERATE", "HIGH"] },
+            "I": { "type": "string", "enum": ["LOW", "MODERATE", "HIGH"] },
+            "A": { "type": "string", "enum": ["LOW", "MODERATE", "HIGH"] }
+          }
+        },
+        "tier": {
+          "type": "string",
+          "enum": ["L0", "L1", "L2", "L3"],
+          "description": "MUST equal derive_tier(classification, data_subjects). Validated by eka-tier-consistency hook."
+        },
+        "owner": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Single person responsible for accuracy."
+        },
+        "status": {
+          "type": "string",
+          "enum": ["draft", "review", "approved", "review-due", "superseded", "archived"]
+        },
+        "last_reviewed": {
+          "type": "string",
+          "format": "date"
+        },
+        "next_review": {
+          "type": "string",
+          "format": "date"
+        },
+        "review_cadence": {
+          "type": "string",
+          "pattern": "^\\d+[dwmy]$"
+        },
+        "codename_refs": {
+          "type": "array",
+          "items": { "type": "string", "pattern": "^[A-Z]+-?\\d+[A-Za-z0-9-]*$" },
+          "uniqueItems": true,
+          "default": []
+        },
+        "data_subjects": {
+          "type": "array",
+          "items": { "type": "string", "pattern": "^(EMP|CAND|BOARD|INV)-[\\w-]+$" },
+          "uniqueItems": true,
+          "default": []
+        },
+        "override_reason": {
+          "type": ["string", "null"]
+        },
+        "labels": {
+          "type": "array",
+          "items": { "type": "string", "pattern": "^[a-z0-9-]+$" },
+          "uniqueItems": true,
+          "default": []
+        },
+        "related": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^(repo|drive|drive-folder|plane|link|secret):.+"
+          },
+          "default": []
+        },
+        "replaced_by": { "type": ["string", "null"] },
+        "supersedes": { "type": ["string", "null"] },
+        "expires_at": { "type": ["string", "null"], "format": "date" },
+        "expiry_action": { "type": "string", "enum": ["archive", "restrict", "delete"], "default": "archive" },
+        "review_notes": {
+          "type": "object",
+          "properties": {
+            "type": { "type": "string", "enum": ["substantive", "no-change", "deferred"] },
+            "changes": { "type": "string" },
+            "verified_against": { "type": "string" },
+            "reason": { "type": "string" },
+            "new_next_review": { "type": "string", "format": "date" }
+          }
+        },
+        "notes": { "type": ["string", "null"] },
+        "skill": {
+          "type": "object",
+          "description": "Required when schema is eka.v1.skill.",
+          "required": ["skill_id", "version", "agents"],
+          "additionalProperties": false,
+          "properties": {
+            "skill_id": { "type": "string", "pattern": "^eka-[a-z-]+$" },
+            "version": { "type": ["number", "string"] },
+            "agents": {
+              "type": "array",
+              "items": { "type": "string", "enum": ["L0", "L1", "L2", "L3"] },
+              "uniqueItems": true
+            },
+            "side_effects": { "type": ["boolean", "string"] },
+            "duration_estimate": { "type": "string" },
+            "human_required": { "type": ["boolean", "string"] },
+            "audience": { "type": "string" }
+          }
+        }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "schema": { "const": "eka.v1.skill" } } },
+          "then": { "required": ["skill"] }
+        }
+      ]
+    }
+  }
+}

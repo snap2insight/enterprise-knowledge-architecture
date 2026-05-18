@@ -1,0 +1,42 @@
+# EKA validation workflow. Runs on every PR and push to main.
+# Drop in .github/workflows/eka-validate.yml of your EKA repo.
+
+name: EKA Validate
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    name: Pre-commit hooks + conformance
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0  # full history for cross-commit checks
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Install eka-helpers + pre-commit
+        run: |
+          python -m pip install --upgrade pip
+          pip install eka-helpers pre-commit
+
+      - name: Run all pre-commit hooks
+        run: pre-commit run --all-files --show-diff-on-failure
+
+      - name: Run conformance check
+        run: |
+          eka validate --conformance ${{ vars.EKA_CONFORMANCE_TARGET || 'L1' }} .
+
+      - name: Verify manifest freshness
+        run: |
+          eka manifest --check-freshness .

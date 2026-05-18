@@ -1,0 +1,55 @@
+# See https://mystmd.org/guide/frontmatter
+# Project config. The TOC, abbreviations, and shared theme each live in
+# their own files so adding entries (or tweaking the theme across all
+# three sister docs) doesn't require editing this file.
+version: 1
+extends:
+  - toc.yml
+  - abbreviations.yml
+  - shared-theme.yml
+
+project:
+  id: enterprise-knowledge-architecture
+  title: "Enterprise Knowledge Architecture (EKA)"
+  description: "Enterprise knowledge architecture for the AI era — classified at source, verifiable by audit, shareable by tier."
+  authors:
+    - name: EKA Maintainer
+  license: CC-BY-4.0
+  keywords:
+    - knowledge architecture
+    - data classification
+    - FIPS 199
+    - NIST 800-53
+    - ISO 27002
+    - GDPR
+    - Zero Trust
+    - AI agents
+    - LLM
+    - markdown
+  date: 2026-05-17
+  # Hide everything that isn't pure narrative markdown from the rendered
+  # site. The TOC explicitly lists what IS rendered; the rest of the repo
+  # is still present (cloneable, agent-readable) but won't be picked up
+  # by MyST's auto-discovery.
+  exclude:
+    - "_build/**"
+    - "**/node_modules/**"
+    - "**/*.json"
+    - "**/*.yaml"
+    - "**/*.yml"
+    - "**/*.py"
+    - "**/*.template.md"        # templates ship as artifacts, not as rendered pages
+  numbering:
+    headings: true
+    figure:
+      enabled: true
+    table:
+      enabled: true
+
+site:
+  options:
+    logo_text: "EKA"
+    # Hover-preview tooltips for cross-references are on by default in
+    # book-theme. All cross-refs use explicit (label)= anchors so previews
+    # resolve to the target's title + first paragraph.
+    hover_xref: true

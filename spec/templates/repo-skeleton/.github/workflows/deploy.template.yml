@@ -1,0 +1,70 @@
+# EKA-conformant Pages deployment workflow.
+# Copy to .github/workflows/deploy.yml; adjust visibility per repo tier.
+
+name: Build & Deploy Documentation
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  validate:
+    name: EKA validation
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - name: Install eka-helpers + pre-commit
+        run: |
+          pip install eka-helpers pre-commit
+      - name: Run all EKA hooks
+        run: pre-commit run --all-files
+      - name: Run conformance check
+        run: eka validate --conformance ${{ vars.EKA_CONFORMANCE_TARGET || 'L1' }} .
+
+  build:
+    name: Build site
+    needs: validate
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 24
+      - name: Install MyST
+        run: npm install -g mystmd
+      - name: Build with MyST
+        run: |
+          BASE_URL="/${{ github.event.repository.name }}" myst build --html
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v5
+        with:
+          path: './_build/html'
+
+  deploy:
+    name: Deploy to GitHub Pages
+    needs: build
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v5

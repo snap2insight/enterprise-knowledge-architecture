@@ -1,0 +1,24 @@
+# Shared theme config for the EKA spec (public site, generic theme only).
+#
+# Pulled into myst.yml via `extends:`.
+#
+# All theme assets resolve via the `_toolkit/` symlink, which points at
+# a local clone of the myst-docs-toolkit repo. The deploy workflow and
+# bin/setup-dev.sh both create this symlink before `myst build` runs.
+# `_toolkit/` is gitignored — it never enters this repo.
+#
+# Layout assumed:
+#   _toolkit/templates/book-theme  — site template (vendored book-theme)
+#   _toolkit/css/site.css          — generic CSS overlay
+#   _toolkit/parts/footer.md       — generic default footer
+#   site-assets/images/*           — per-site logo, favicon, hero
+version: 1
+site:
+  template: _toolkit/templates/book-theme
+  options:
+    logo: site-assets/images/logo-placeholder.svg
+    favicon: site-assets/images/favicon-placeholder.svg
+    style: _toolkit/css/site.css
+    hide_authors: true
+  parts:
+    footer: _toolkit/parts/footer.md

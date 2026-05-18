@@ -1,0 +1,99 @@
+# EKA Pages deployment workflow.
+#
+# Builds the MyST site and deploys to GitHub Pages on every push to main.
+#
+# The toolkit (book-theme template + CSS overlay + default footer) is
+# fetched at build time from the myst-docs-toolkit repo. No toolkit
+# content is committed to this repo (`_toolkit/` is gitignored).
+#
+# Required repo variables (Settings → Variables → Actions):
+#   - TOOLKIT_REPO   — the toolkit repo to fetch (e.g. yourorg/myst-docs-toolkit)
+#   - TOOLKIT_REF    — branch / tag (optional; defaults to main)
+#   - EKA_CONFORMANCE_TARGET — L0 for the canonical public deploy; L1/L2/L3
+#                              for tier-restricted forks (controls Pages-visibility check)
+#
+# The verify-visibility job fails the deploy if a non-L0 repo's Pages
+# is set to public. For the canonical EKA spec deploy this is a no-op (L0).
+
+name: EKA Build & Deploy Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: Build MyST site
+    runs-on: ubuntu-latest
+    steps:
+      - name: Validate required repo variables
+        run: |
+          if [ -z "${{ vars.TOOLKIT_REPO }}" ]; then
+            echo "::error::Repo variable TOOLKIT_REPO is not set."
+            echo "::error::Settings → Variables → Actions → New repository variable"
+            echo "::error::Name: TOOLKIT_REPO   Value: <org>/myst-docs-toolkit"
+            exit 1
+          fi
+
+      - uses: actions/checkout@v5
+
+      - name: Fetch toolkit
+        uses: actions/checkout@v5
+        with:
+          repository: ${{ vars.TOOLKIT_REPO }}
+          ref:        ${{ vars.TOOLKIT_REF || 'main' }}
+          path:       _toolkit
+          submodules: true
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 24
+
+      - name: Install MyST
+        run: npm install -g mystmd
+
+      - name: Build with MyST
+        run: |
+          BASE_URL="/${{ github.event.repository.name }}" myst build --html
+
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v5
+        with:
+          path: "./_build/html"
+
+  verify-visibility:
+    name: Verify Pages visibility matches tier
+    runs-on: ubuntu-latest
+    if: ${{ vars.EKA_CONFORMANCE_TARGET != 'L0' }}
+    steps:
+      - uses: actions/checkout@v5
+      - name: Confirm Pages is auth-gated
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          PAGES_VIS=$(gh api repos/${{ github.repository }}/pages --jq '.visibility' 2>/dev/null || echo "public")
+          if [ "$PAGES_VIS" = "public" ] && [ "${{ vars.EKA_CONFORMANCE_TARGET }}" != "L0" ]; then
+            echo "::error::Pages is publicly visible but repo targets non-L0 conformance"
+            exit 1
+          fi
+
+  deploy:
+    name: Deploy
+    needs: [build, verify-visibility]
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v5

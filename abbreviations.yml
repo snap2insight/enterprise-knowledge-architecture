@@ -1,0 +1,109 @@
+# Project-wide abbreviations for the EKA spec.
+# Referenced by myst.yml via `extends:`. Abbreviations declared here
+# produce hover tooltips on every page where the term appears in body.
+#
+# To add a new abbreviation: add a key:value entry under
+# `project.abbreviations` below.
+
+version: 1
+project:
+  abbreviations:
+    # === EKA-specific ===
+    EKA: Enterprise Knowledge Architecture
+    L0: Public access tier
+    L1: Internal access tier
+    L2: Confidential access tier
+    L3: Restricted access tier
+    L4: Live-secret access tier (out of docs scope)
+
+    # === Security & access ===
+    ACL: Access Control List
+    AGI: Artificial General Intelligence
+    AI: Artificial Intelligence
+    DLP: Data Loss Prevention
+    IAM: Identity and Access Management
+    IdP: Identity Provider
+    JIT: Just-In-Time (access provisioning)
+    JWT: JSON Web Token
+    MCP: Model Context Protocol
+    MFA: Multi-Factor Authentication
+    OAuth: Open Authorization
+    OIDC: OpenID Connect
+    OWASP: Open Web Application Security Project
+    PII: Personally Identifiable Information
+    RBAC: Role-Based Access Control
+    SAML: Security Assertion Markup Language
+    SCIM: System for Cross-domain Identity Management
+    SSO: Single Sign-On
+    STRIDE: "Spoofing, Tampering, Repudiation, Info-disclosure, DoS, Elevation"
+    TLS: Transport Layer Security
+    TOTP: Time-based One-Time Password
+    WebAuthn: Web Authentication (FIDO2)
+    ZTA: Zero Trust Architecture
+
+    # === Authentication ===
+    2FA: Two-Factor Authentication
+    AAL: Authenticator Assurance Level
+    OTP: One-Time Password
+
+    # === Standards bodies & frameworks ===
+    CIS: Center for Internet Security
+    FedRAMP: Federal Risk and Authorization Management Program
+    FIPS: Federal Information Processing Standard
+    ISO: International Organization for Standardization
+    NIST: National Institute of Standards and Technology
+    SP: Special Publication (as in NIST SP 800-NN)
+
+    # === Regulations ===
+    CCPA: California Consumer Privacy Act
+    CPRA: California Privacy Rights Act
+    DTSA: Defend Trade Secrets Act
+    FTC: Federal Trade Commission
+    GDPR: General Data Protection Regulation
+    GLBA: Gramm-Leach-Bliley Act
+    HIPAA: Health Insurance Portability and Accountability Act
+    NIS2: Network and Information Security Directive 2 (EU)
+    SOC: System and Organization Controls
+    SOX: Sarbanes-Oxley Act
+
+    # === Roles & organization ===
+    CXO: Chief X Officer (CEO/CTO/COO/CFO/etc.)
+    HRIS: Human Resources Information System
+    SRE: Site Reliability Engineering
+
+    # === Technical formats & protocols ===
+    API: Application Programming Interface
+    CDN: Content Delivery Network
+    CI: Continuous Integration
+    CRUD: "Create, Read, Update, Delete"
+    CSV: Comma-Separated Values
+    JSON: JavaScript Object Notation
+    LLM: Large Language Model
+    ML: Machine Learning
+    PR: Pull Request
+    RFC: Request For Comments
+    SDK: Software Development Kit
+    SLA: Service Level Agreement
+    ULID: Universally Unique Lexicographically Sortable Identifier
+    URI: Uniform Resource Identifier
+    URL: Uniform Resource Locator
+    UTC: Coordinated Universal Time
+    VCS: Version Control System
+    VPN: Virtual Private Network
+    WAF: Web Application Firewall
+    YAML: YAML Ain't Markup Language
+
+    # === Process & engineering ===
+    ADR: Architecture Decision Record
+    IaC: Infrastructure as Code
+    IP: Intellectual Property
+    KM: Knowledge Management
+    RFP: Request For Proposal
+    ROI: Return On Investment
+    SaaS: Software as a Service
+    DSAR: Data Subject Access Request
+
+    # === Industry codes used in EKA ===
+    CODEOWNERS: GitHub-native ownership-declaration file
+    GAM: Google Apps Manager (CLI tool)
+    EU: European Union
