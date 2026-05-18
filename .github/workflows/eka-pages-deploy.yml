@@ -92,7 +92,8 @@ jobs:
     needs: [build, verify-visibility]
     # Deploy if build succeeded AND visibility-check either passed or
     # was skipped (skipped is normal for L0 — the gate doesn't apply).
-    if: ${{ needs.build.result == 'success' && needs.verify-visibility.result != 'failure' }}
+    # always() forces the if to evaluate even when verify-visibility was skipped.
+    if: ${{ always() && needs.build.result == 'success' && needs.verify-visibility.result != 'failure' }}
     runs-on: ubuntu-latest
     environment:
       name: github-pages
