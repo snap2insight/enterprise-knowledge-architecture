@@ -74,7 +74,7 @@ project:
     # === Technical formats & protocols ===
     API: Application Programming Interface
     CDN: Content Delivery Network
-    CI: Continuous Integration
+    CIA: Confidentiality, Integrity, Availability
     CRUD: "Create, Read, Update, Delete"
     CSV: Comma-Separated Values
     JSON: JavaScript Object Notation

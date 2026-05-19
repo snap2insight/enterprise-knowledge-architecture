@@ -1,0 +1,24 @@
+# myst-mermaid plugin config for the EKA spec docs site.
+# Read by _toolkit/plugins/myst-mermaid/plugin.py at build time.
+
+# Emit each diagram as a .mermaid-light + .mermaid-dark variant pair.
+# The toolkit's CSS hides whichever doesn't match the active color scheme.
+dual_render: true
+
+# ── Mermaid config below (see https://mermaid.js.org/config/) ──
+
+theme: default
+
+# Architects Daughter (handwritten) comes from the toolkit's CSS via
+# `.mermaid svg *` !important — so the font here mostly matters as a
+# metric/sizing hint for mermaid's layout calculations. Leave system-ui
+# so mermaid sizes labels for a normal sans-serif width; the rendered
+# text gets the handwritten font applied by CSS.
+fontFamily: "system-ui, -apple-system, sans-serif"
+themeVariables:
+  fontFamily: "system-ui, -apple-system, sans-serif"
+  fontSize: "14px"
+
+logLevel: fatal
+darkMode: false
+markdownAutoWrap: true

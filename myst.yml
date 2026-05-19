@@ -27,6 +27,12 @@ project:
     - LLM
     - markdown
   date: 2026-05-17
+  # Mermaid plugin from the toolkit — pre-renders each mermaid block as
+  # a light + dark variant pair for clean rendering in either theme.
+  # Config in `myst-mermaid.yml` at this repo root.
+  plugins:
+    - type: executable
+      path: _toolkit/plugins/myst-mermaid/plugin.py
   # Hide everything that isn't pure narrative markdown from the rendered
   # site. The TOC explicitly lists what IS rendered; the rest of the repo
   # is still present (cloneable, agent-readable) but won't be picked up
@@ -40,7 +46,7 @@ project:
     - "**/*.py"
     - "**/*.template.md"        # templates ship as artifacts, not as rendered pages
   numbering:
-    headings: true
+    headings: false
     figure:
       enabled: true
     table:
