@@ -7,7 +7,7 @@ dual_render: true
 
 # ── Mermaid config below (see https://mermaid.js.org/config/) ──
 
-theme: default
+theme: neutral
 
 # Architects Daughter (handwritten) comes from the toolkit's CSS via
 # `.mermaid svg *` !important — so the font here mostly matters as a
