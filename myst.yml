@@ -10,6 +10,7 @@ extends:
 
 project:
   id: enterprise-knowledge-architecture
+  github: https://github.com/snap2insight/enterprise-knowledge-architecture
   title: "Enterprise Knowledge Architecture (EKA)"
   description: "Enterprise knowledge architecture for the AI era — classified at source, verifiable by audit, shareable by tier."
   authors:
