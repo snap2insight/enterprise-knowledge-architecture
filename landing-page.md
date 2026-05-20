@@ -16,7 +16,7 @@ A way to set the highest bar for how a team captures, reviews, and shares
 its knowledge — built for AI agents and human contributors working side
 by side.
 
-```{image} site-assets/images/hero-placeholder.svg
+```{image} site-assets/images/hero.png
 ```
 
 {button}`Begin Reading </README>`

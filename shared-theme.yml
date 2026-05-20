@@ -16,8 +16,9 @@ version: 1
 site:
   template: _toolkit/templates/book-theme
   options:
-    logo: site-assets/images/logo-placeholder.svg
-    favicon: site-assets/images/favicon-placeholder.svg
+    logo: site-assets/images/logo.svg
+    logo_dark: site-assets/images/logo_dark.svg
+    favicon: site-assets/images/favicon.svg
     style: _toolkit/css/site.css
     hide_authors: true
   parts:
