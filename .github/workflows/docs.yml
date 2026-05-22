@@ -37,6 +37,7 @@ concurrency:
 # See https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+  NPM_CONFIG_PREFIX: /home/runner/.npm-global
 
 jobs:
   build:
@@ -53,6 +54,8 @@ jobs:
           fi
 
       - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
 
       - name: Fetch toolkit
         uses: actions/checkout@v5
@@ -70,11 +73,29 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Install MyST
-        run: npm install -g mystmd
+      - uses: extractions/setup-just@v3
 
-      - name: Install Python deps for myst-mermaid plugin
-        run: pip install pyyaml jsonschema
+      - name: Configure npm prefix + PATH
+        run: |
+          mkdir -p "$NPM_CONFIG_PREFIX/bin"
+          npm config set prefix "$NPM_CONFIG_PREFIX"
+          echo "$NPM_CONFIG_PREFIX/bin" >> "$GITHUB_PATH"
+
+      - name: Cache npm globals + tarball cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            /home/runner/.npm-global
+            /home/runner/.npm
+          key: ${{ runner.os }}-npm-docs-${{ hashFiles('Justfile') }}
+          restore-keys: |
+            ${{ runner.os }}-npm-docs-
+
+      - name: Install build deps
+        run: just python-deps node-deps
+
+      - name: Update dynamic dates
+        run: just update-dates
 
       - name: Build with MyST
         env:
