@@ -73,6 +73,7 @@ jobs:
         with:
           python-version: "3.12"
 
+      - uses: astral-sh/setup-uv@v6
       - uses: extractions/setup-just@v3
 
       - name: Configure npm prefix + PATH
@@ -91,25 +92,35 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-npm-docs-
 
+      - name: Cache Python venv
+        uses: actions/cache@v4
+        with:
+          path: .venv
+          key: ${{ runner.os }}-venv-${{ hashFiles('requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-venv-
+
       - name: Install build deps
         run: just python-deps node-deps
 
-      - name: Update dynamic dates
-        run: just update-dates
-
-      - name: Build with MyST
+      - name: Resolve BASE_URL from the Pages serving URL
+        id: base
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          # Derive BASE_URL from the actual Pages serving URL. Public Pages
-          # are at https://<org>.github.io/<repo>/ → BASE_URL=/<repo>.
+          # Public Pages → https://<org>.github.io/<repo>/  → BASE_URL=/<repo>
           # Private/auth-gated Pages (forks that change visibility) get an
           # obfuscated hostname at the root → BASE_URL is empty.
           PAGES_URL=$(gh api repos/${{ github.repository }}/pages --jq '.html_url' 2>/dev/null || echo "")
           BASE_PATH=$(printf '%s' "$PAGES_URL" | sed -E 's|^https?://[^/]+||;s|/$||')
           echo "Pages URL: $PAGES_URL"
           echo "BASE_URL:  $BASE_PATH"
-          BASE_URL="$BASE_PATH" myst build --html
+          echo "BASE_URL=$BASE_PATH" >> "$GITHUB_OUTPUT"
+
+      - name: Build (just ci-docs)
+        env:
+          BASE_URL: ${{ steps.base.outputs.BASE_URL }}
+        run: just ci-docs
 
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v5

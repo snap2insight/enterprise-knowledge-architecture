@@ -1,0 +1,5 @@
+# Python deps for the docs site's bin/ scripts.
+# Installed into .venv/ by `just setup` (uv-managed).
+
+pyyaml
+jsonschema
