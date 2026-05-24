@@ -34,6 +34,9 @@ project:
   plugins:
     - type: executable
       path: _toolkit/plugins/myst-mermaid/plugin.py
+    - https://github.com/choldgraf/myst-substitutions/releases/download/v0.1/index.mjs
+  substitutions:
+    date: "2026-05-17"
   # Hide everything that isn't pure narrative markdown from the rendered
   # site. The TOC explicitly lists what IS rendered; the rest of the repo
   # is still present (cloneable, agent-readable) but won't be picked up

@@ -1,3 +1,8 @@
+---
+title: "Enterprise Knowledge Architecture (EKA)"
+substitutions:
+  date: "2026-05-17"
+---
 # Enterprise Knowledge Architecture (EKA)
 
 > *Enterprise knowledge architecture for the AI era — classified at
@@ -114,7 +119,7 @@ v1.0 release.
 
 - **Version:** `eka.v1` (draft)
 - **Status:** Draft for peer / leadership review
-- **Last updated:** 2026-05-17
+- **Last updated:** {{ date }}
 
 Concrete feedback — especially "this won't work because…" or "we
 tried this and it failed when…" — is the most useful kind.

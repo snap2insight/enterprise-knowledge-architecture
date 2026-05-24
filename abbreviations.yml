@@ -93,17 +93,45 @@ project:
     WAF: Web Application Firewall
     YAML: YAML Ain't Markup Language
 
+    # === Cloud, Infrastructure & Data platforms ===
+    ADLS: Azure Data Lake Storage
+    AKS: Azure Kubernetes Service
+    BI: Business Intelligence
+    CDC: Change Data Capture
+    DAG: Directed Acyclic Graph
+    DR: Disaster Recovery
+    FK: Foreign Key
+    GPU: Graphics Processing Unit
+    HA: High Availability
+    KQL: Kusto Query Language
+    OLAP: Online Analytical Processing
+    OLTP: Online Transaction Processing
+    OTel: OpenTelemetry
+    OTLP: OpenTelemetry Protocol
+    PVC: PersistentVolumeClaim
+    RWO: ReadWriteOnce
+    RWX: ReadWriteMany
+    TTL: Time To Live
+    VM: Virtual Machine
+
     # === Process & engineering ===
     ADR: Architecture Decision Record
+    DSAR: Data Subject Access Request
+    GA: General Availability
     IaC: Infrastructure as Code
     IP: Intellectual Property
     KM: Knowledge Management
+    MTTD: Mean Time To Detect
+    QPS: Queries Per Second
     RFP: Request For Proposal
     ROI: Return On Investment
     SaaS: Software as a Service
-    DSAR: Data Subject Access Request
+    SFA: Sales Force Automation
+    SPOF: Single Point of Failure
+    TCO: Total Cost of Ownership
 
     # === Industry codes used in EKA ===
     CODEOWNERS: GitHub-native ownership-declaration file
     GAM: Google Apps Manager (CLI tool)
     EU: European Union
+
